@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { backendURL } from './config';
 const winOptions = [
     { label: "Full House", code: 1 },
     { label: "Top Line", code: 2 },
@@ -29,7 +29,7 @@ const GenerateTickets = () => {
         try {
             const isConfirmed = window.confirm("Are you sure you want to Generate new tickets?");
             if (isConfirmed) {
-                const res = await axios.get('https://tambola-ppuw.onrender.com/api/generate-tickets');
+                const res = await axios.get(`${backendURL}/api/generate-tickets`);
                 setNames({})
 
                 setUp(!up)
@@ -55,11 +55,11 @@ const GenerateTickets = () => {
                     seconds: seconds || 5,
                     winConditions: selectedOptions,
                 };
-                const res = await axios.post('https://tambola-ppuw.onrender.com/api/start-game', data);
+                const res = await axios.post(`${backendURL}/api/start-game`, data);
                 const data2 = {
                     voice: voice
                 };
-                const res2 = await axios.post('https://tambola-ppuw.onrender.com/api/setvoice', data2);
+                const res2 = await axios.post(`${backendURL}/api/setvoice`, data2);
             }
 
         } catch (err) {
@@ -74,7 +74,7 @@ const GenerateTickets = () => {
 
         const fetchTickets = async () => {
             try {
-                const res = await axios.get('https://tambola-ppuw.onrender.com/api/gettickets');
+                const res = await axios.get(`${backendURL}/api/gettickets`);
 
                 const allTickets = res.data.tickets
                 //   console.log(allTickets)
@@ -103,7 +103,7 @@ const GenerateTickets = () => {
                 name: name
             };
 
-            await axios.post('https://tambola-ppuw.onrender.com/api/assign-ticket', data);
+            await axios.post(`${backendURL}/api/assign-ticket`, data);
             // alert(`Ticket ${index + 1} Assigned to ${name}`);
             setUp(!up)
         } catch (err) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { backendURL } from './config';
 
 const PlayersList = () => {
     const [tickets, setTickets] = useState([]);
@@ -8,7 +9,7 @@ const PlayersList = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const res = await axios.get('https://tambola-ppuw.onrender.com/api/getsoldtickets');
+                const res = await axios.get(`${backendURL}/api/getsoldtickets`);
                 setTickets(res.data.tickets || []);
             } catch (err) {
                 console.error('Error fetching tickets:', err);

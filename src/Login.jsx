@@ -2,7 +2,7 @@ import React, { useState,useEffect} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-
+import { backendURL } from './config';
 const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -28,7 +28,7 @@ const Login = () => {
             const data = {
                 password: password
             }
-            const response = await axios.post('https://tambola-ppuw.onrender.com/api/login', data);
+            const response = await axios.post(`${backendURL}/api/login`, data);
 
             if (response.status == 200) {
                 localStorage.setItem('adminToken', response.data.adminToken);

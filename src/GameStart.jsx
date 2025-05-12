@@ -4,6 +4,8 @@ import axios from 'axios'; // Ensure axios is imported
 import socket from './socket'; // Adjust path if needed
 import useUnsavedChangesWarning from "./Dontleave.jsx";
 import NavigationGuard from "./NavigationGuard";
+import { backendURL } from './config';
+import ContactButtons from "./ContactButtons";
 
 const GameStart = () => {
   const [currentNumber, setCurrentNumber] = useState(null);
@@ -12,62 +14,68 @@ const GameStart = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [leaving, setLeaving] = useState(false);
-   const [voice, setVoice] = useState("");
-   const [check, setCheck] = useState();
+  const [voice, setVoice] = useState("");
+  const [check, setCheck] = useState();
 
- useUnsavedChangesWarning(leaving);
+  useUnsavedChangesWarning(leaving);
 
-const speakNumber = (text) => {
+  const speakNumber = (text) => {
   const utterance = new SpeechSynthesisUtterance(text);
 
-  const voices = speechSynthesis.getVoices();
-  
-
-  // Define the filter based on selected voice type
-  const preferredVoice = voices.find((v) => {
-    const name = v.name.toLowerCase();
-    const isEnglish = v.lang.includes("en");
- if(voice.length!=4) {
-      return (
-        isEnglish &&
-        (name.includes("female") ||
-         name.includes("woman") ||
-         name.includes("samantha") ||      // macOS female voice
-         name.includes("karen") ||         // macOS AU female
-         name.includes("google us english"))
-      );
-      
+  const setVoiceAndSpeak = () => {
+    const voices = speechSynthesis.getVoices();
+    if (!voices.length) {
+      console.warn("Voices not loaded yet.");
+      return;
     }
-  });
-if(voice.length==4){
 
-  utterance.voice = preferredVoice || voices[0];
-  utterance.pitch = 1;
-  utterance.rate = 1;
-  utterance.lang = 'en-US';
-}else{
+    const preferredVoice = voices.find((v) => {
+      const name = v.name.toLowerCase();
+      const isEnglish = v.lang.includes("en");
+      if (voice.length != 4) {
+        return isEnglish && (
+          name.includes("female") ||
+          name.includes("woman") ||
+          name.includes("samantha") ||
+          name.includes("karen") ||
+          name.includes("google us english")
+        );
+      }
+    });
+
     utterance.voice = preferredVoice || voices[0];
-  utterance.pitch = 1.2;
-  utterance.rate = 1;
-  utterance.lang = 'en-US';
-}
+    utterance.pitch = voice.length === 4 ? 1 : 1.2;
+    utterance.rate = 1;
+    utterance.lang = 'en-US';
 
-  speechSynthesis.speak(utterance);
+    speechSynthesis.speak(utterance);
+  };
+
+  // Ensure voices are loaded
+  if (!speechSynthesis.getVoices().length) {
+    // Wait for voiceschanged event
+    speechSynthesis.onvoiceschanged = () => {
+      setVoiceAndSpeak();
+    };
+  } else {
+    setVoiceAndSpeak();
+  }
 };
 
-useEffect(() => {
-  const getvoice = async () => {
-    try {
-      const res = await axios.get('https://tambola-ppuw.onrender.com/api/getvoice');
 
-     
-      setVoice(res.data.voice.voiceType);
-    } catch (err) {
-      console.error('Error fetching voice:', err);
-    }
-  };
-  getvoice();
-}, [check])
+  useEffect(() => {
+    const getvoice = async () => {
+      try {
+        const res = await axios.get(`${backendURL}/api/getvoice`);
+
+
+        setVoice(res.data.voice.voiceType);
+      } catch (err) {
+        console.error('Error fetching voice:', err);
+      }
+    };
+    getvoice();
+  }, [check])
 
   // useEffect(() => {
   //   if(currentNumber!=null){
@@ -97,25 +105,34 @@ useEffect(() => {
     });
 
     socket.on("game-over", () => {
-        speakNumber("Game is now over, check winners")
-        // setLeaving(false)
+
+        speakNumber("Game is over, check winners")
+  
       setGameOver(true);
     });
+
+    socket.on("new-winner", (val) => {
+      const names = val.value.join(" and ");
+      speakNumber(`${val.type} by ${names}`);
+
+    });
+
 
     return () => {
       socket.off("number");
       socket.off("game-over");
+      socket.off("new-winner");
 
     };
   }, [numberHistory]); // Add `numberHistory` to the dependency array
 
   const fetchTickets = async () => {
     try {
-      const res = await axios.get('https://tambola-ppuw.onrender.com/api/getsoldtickets');
+      const res = await axios.get(`${backendURL}/api/getsoldtickets`);
       const allTickets = res.data.tickets;
       setTickets(allTickets);
       // setVoice(res.data.voiceType);
-      
+
     } catch (err) {
       console.error('Error fetching tickets:', err);
     }
@@ -229,6 +246,7 @@ useEffect(() => {
         ))}
 
       </div>
+      <ContactButtons />
     </div>
 
   );

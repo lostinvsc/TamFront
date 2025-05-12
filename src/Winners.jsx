@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { backendURL } from './config';
+import ContactButtons from "./ContactButtons";
 
 const Winners = () => {
   const [winners, setWinners] = useState(null);
@@ -8,7 +10,7 @@ const Winners = () => {
   useEffect(() => {
     const fetchWinners = async () => {
       try {
-        const response = await axios.get('https://tambola-ppuw.onrender.com/api/getwinners');
+        const response = await axios.get(`${backendURL}/api/getwinners`);
         console.log(response.data);
         setWinners(response.data);
       } catch (error) {
@@ -62,6 +64,7 @@ const Winners = () => {
           return null;
         })}
       </div>
+      <ContactButtons />
     </div>
   );
 };
