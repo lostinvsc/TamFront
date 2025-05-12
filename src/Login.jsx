@@ -30,7 +30,7 @@ const Login = () => {
             }
             const response = await axios.post('https://tambola-ppuw.onrender.com/api/login', data);
 
-            if (response.status === 200) {
+            if (response.status == 200) {
                 localStorage.setItem('adminToken', response.data.adminToken);
 
                 navigate('/host/generatetickets');
