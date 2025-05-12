@@ -1,0 +1,257 @@
+body {
+  color: white;
+}
+* {
+  user-select: none;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #8e44ad, #e74c3c, #27ae60, #8e44ad);
+  background-size: 400% 400%;
+  animation: gradientMove 10s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-ticket-bg {
+  background: linear-gradient(45deg, #000000, #f1c40f);
+  background-size: 200% 200%;
+  animation: ticketGradientAnim 3s ease infinite;
+}
+
+@keyframes ticketGradientAnim {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgb(255, 212, 133), 0 0 10px rgb(255, 212, 133), 0 0 15px rgb(255, 212, 133);
+  }
+  50% {
+    box-shadow: 0 0 10px rgb(255, 212, 133), 0 0 20px rgb(255, 212, 133), 0 0 30px rgb(255, 212, 133);
+  }
+  100% {
+    box-shadow: 0 0 5px rgb(255, 212, 133), 0 0 10px rgb(255, 212, 133), 0 0 15px rgb(255, 212, 133);
+  }
+}
+
+.animate-glow {
+  animation: glow 2s infinite;
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cellFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ticket-cell {
+  animation: cellFadeIn 0.4s ease-in-out;
+  transition: all 0.3s;
+}
+
+.ticket-cell:hover {
+  background: linear-gradient(135deg, #f9e38a, #000000);
+  color: white;
+  transform: scale(1.05);
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes ticketFadeLift {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animated-ticket {
+  animation: ticketFadeLift 0.6s ease forwards;
+  background: linear-gradient(-45deg, #ffcc01, #ff6f00, #6fffa4, #ff0000);
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease infinite, ticketFadeLift 0.6s ease forwards;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.3s;
+}
+
+.animated-ticket:hover {
+  transform: scale(1.02);
+}
+
+@keyframes slideFadeIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-fade-in {
+  animation: slideFadeIn 0.4s ease-out forwards;
+}
+
+@keyframes slideColorful {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+    background-color: #ffbbff; /* Start with a neon color */
+  }
+  50% {
+    background-color: #00ffcc; /* Transition to another neon color */
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+    background-color: #ffae91; /* End with a vibrant color */
+  }
+}
+
+@keyframes glowEffect {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(250, 214, 250, 0.8), 0 0 30px rgba(0, 255, 255, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(250, 214, 250, 0.8), 0 0 40px rgba(0, 255, 255, 1);
+  }
+}
+
+.animate-glowing-sidebar {
+  animation: glowEffect 1.5s ease-in-out infinite;
+}
+
+
+.neon-text {
+  text-shadow:
+    0 0 5px #0088ff,
+    0 0 10px #ffd700,
+    0 0 20px #62ff00,
+    0 0 30px #ffaa00,
+    0 0 40px #ffbb00,
+    0 0 70px #ffcc00,
+    0 0 80px #ff4bf3;
+}
+
+.winners-container {
+  background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1c1c1c);
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Floating colored bubbles */
+.winners-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(circle, rgba(255, 0, 150, 0.2) 20%, transparent 80%),
+                    radial-gradient(circle, rgba(0, 255, 255, 0.2) 20%, transparent 80%),
+                    radial-gradient(circle, rgba(255, 255, 0, 0.2) 20%, transparent 80%);
+  background-size: 33% 33%;
+  animation: floatBubbles 30s linear infinite;
+  z-index: -1;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes floatBubbles {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.2);
+  }
+}
+
+
+.sparkle {
+  animation: sparkle 2s infinite ease-in-out;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    text-shadow:
+      0 0 5px #fff200,
+      0 0 15px #ff6,
+      0 0 20px #ff0;
+  }
+  50% {
+    text-shadow:
+      0 0 8px #fff200,
+      0 0 20px #ffea00,
+      0 0 25px #ff0;
+  }
+}
