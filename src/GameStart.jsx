@@ -6,6 +6,7 @@ import useUnsavedChangesWarning from "./Dontleave.jsx";
 import NavigationGuard from "./NavigationGuard";
 import { backendURL } from './config';
 import ContactButtons from "./ContactButtons";
+import UnsoldTickets from './UnsoldTickets.jsx';
 
 const GameStart = () => {
   const [currentNumber, setCurrentNumber] = useState(null);
@@ -16,51 +17,53 @@ const GameStart = () => {
   const [leaving, setLeaving] = useState(false);
   const [voice, setVoice] = useState("");
   const [check, setCheck] = useState();
+  const [showUnsoldPopup, setShowUnsoldPopup] = useState(false);
+
 
   useUnsavedChangesWarning(leaving);
 
   const speakNumber = (text) => {
-  const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(text);
 
-  const setVoiceAndSpeak = () => {
-    const voices = speechSynthesis.getVoices();
-    if (!voices.length) {
-      console.warn("Voices not loaded yet.");
-      return;
-    }
-
-    const preferredVoice = voices.find((v) => {
-      const name = v.name.toLowerCase();
-      const isEnglish = v.lang.includes("en");
-      if (voice.length != 4) {
-        return isEnglish && (
-          name.includes("female") ||
-          name.includes("woman") ||
-          name.includes("samantha") ||
-          name.includes("karen") ||
-          name.includes("google us english")
-        );
+    const setVoiceAndSpeak = () => {
+      const voices = speechSynthesis.getVoices();
+      if (!voices.length) {
+        console.warn("Voices not loaded yet.");
+        return;
       }
-    });
 
-    utterance.voice = preferredVoice || voices[0];
-    utterance.pitch = voice.length === 4 ? 1 : 1.2;
-    utterance.rate = 1;
-    utterance.lang = 'en-US';
+      const preferredVoice = voices.find((v) => {
+        const name = v.name.toLowerCase();
+        const isEnglish = v.lang.includes("en");
+        if (voice.length != 4) {
+          return isEnglish && (
+            name.includes("female") ||
+            name.includes("woman") ||
+            name.includes("samantha") ||
+            name.includes("karen") ||
+            name.includes("google us english")
+          );
+        }
+      });
 
-    speechSynthesis.speak(utterance);
-  };
+      utterance.voice = preferredVoice || voices[0];
+      utterance.pitch = voice.length === 4 ? 1 : 1.2;
+      utterance.rate = 1;
+      utterance.lang = 'en-US';
 
-  // Ensure voices are loaded
-  if (!speechSynthesis.getVoices().length) {
-    // Wait for voiceschanged event
-    speechSynthesis.onvoiceschanged = () => {
-      setVoiceAndSpeak();
+      speechSynthesis.speak(utterance);
     };
-  } else {
-    setVoiceAndSpeak();
-  }
-};
+
+    // Ensure voices are loaded
+    if (!speechSynthesis.getVoices().length) {
+      // Wait for voiceschanged event
+      speechSynthesis.onvoiceschanged = () => {
+        setVoiceAndSpeak();
+      };
+    } else {
+      setVoiceAndSpeak();
+    }
+  };
 
 
   useEffect(() => {
@@ -106,8 +109,8 @@ const GameStart = () => {
 
     socket.on("game-over", () => {
 
-        speakNumber("Game is over, check winners")
-  
+      speakNumber("Game is over, check winners")
+
       setGameOver(true);
     });
 
@@ -143,12 +146,21 @@ const GameStart = () => {
   return (
     <div className='h-screen w-full overflow-auto flex flex-col text-black mx-auto pb-16 px-4 sm:px-6 lg:px-8 animated-gradient'>
       <NavigationGuard when={leaving} message="If you leave, can't see this game later. Leave anyway?" />
+     <div className='text-white px-4 py-2 w-full my-8  flex justify-around'>
+
       <Link
         to="/"
-        className="bg-red-700 text-white px-4 py-2 rounded hover:bg-black transition w-fit my-8"
-      >
+        className="bg-red-700 px-4 py-2 rounded hover:bg-black transition w-fit "
+        >
         ← Return
       </Link>
+           <button
+                    onClick={() => setShowUnsoldPopup(!showUnsoldPopup)}
+                    className=" px-3 bg-green-800 text-white rounded-md items-center"
+                >
+                      Unsold Tickets 
+                </button>
+        </div>
       <div className="text-center mb-6">
         {gameStarted && !gameOver && (
           <div className="text-3xl font-extrabold text-yellow-400 animate-pulse drop-shadow-lg bg-gradient-to-r from-red-700 to-yellow-600 py-4 px-6 rounded-xl shadow-xl border-4 border-yellow-500 text-center">
@@ -247,6 +259,32 @@ const GameStart = () => {
 
       </div>
       <ContactButtons />
+
+      <div
+
+        className={`fixed top-0 left-0 h-screen bg-green-700  w-[90%] max-w-md bg-gradient-to-r text-white shadow-lg z-40 
+    transform transition-transform duration-500 ease-in-out ${showUnsoldPopup ? 'translate-x-0' : '-translate-x-full'}`}
+      >
+        <div className="h-full flex flex-col">
+          <div className="flex justify-end p-4">
+            <button
+              className="text-white font-bold text-2xl"
+              onClick={() => setShowUnsoldPopup(false)}
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-4 pb-4">
+            <UnsoldTickets />
+          </div>
+        </div>
+      </div>
+
+
+
+
+
     </div>
 
   );

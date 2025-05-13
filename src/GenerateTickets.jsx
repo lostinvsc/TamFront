@@ -27,9 +27,12 @@ const GenerateTickets = () => {
 
     const generatetickets = async () => {
         try {
-            const isConfirmed = window.confirm("Are you sure you want to Generate new tickets?");
-            if (isConfirmed) {
-                const res = await axios.get(`${backendURL}/api/generate-tickets`);
+            let userInput = prompt("Enter ticket quantity:");
+            if (userInput) {
+                const data={
+                    n:userInput
+                }
+                const res = await axios.post(`${backendURL}/api/generate-tickets`,data);
                 setNames({})
 
                 setUp(!up)
@@ -144,7 +147,7 @@ const GenerateTickets = () => {
                     </span>
 
                     <br />
-                    Generated Tambola Tickets (100)
+                    Generated Tambola Tickets ({tickets.length})
 
                 </h2>
 
