@@ -8,6 +8,7 @@ import Winners from "./Winners.jsx";
 import PlayersList from "./PlayersList.jsx";
 import Login from "./Login.jsx";
 import UnsoldTickets from "./UnsoldTickets.jsx";
+import BuyTickets from "./BuyTickets.jsx";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -27,6 +28,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="gamestart" element={<GameStart />} />
           <Route path="winners" element={<Winners />} />
           <Route path="unsold" element={<UnsoldTickets />} />
+          <Route path="buytickets" element={<BuyTickets />} />
       
         
         </Route>

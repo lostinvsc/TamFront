@@ -18,6 +18,7 @@ const GameStart = () => {
   const [voice, setVoice] = useState("");
   const [check, setCheck] = useState();
   const [showUnsoldPopup, setShowUnsoldPopup] = useState(false);
+  const [searchName, setSearchName] = useState('');
 
 
   useUnsavedChangesWarning(leaving);
@@ -144,23 +145,33 @@ const GameStart = () => {
 
 
   return (
-    <div className='h-screen w-full overflow-auto flex flex-col text-black mx-auto pb-16 px-4 sm:px-6 lg:px-8 animated-gradient'>
+    <div className='h-screen w-full overflow-auto flex flex-col text-black mx-auto pb-16  sm:px-6 lg:px-8 animated-gradient'>
       <NavigationGuard when={leaving} message="If you leave, can't see this game later. Leave anyway?" />
-     <div className='text-white px-4 py-2 w-full my-8  flex justify-around'>
+      <div className='text-white px-4 py-2 w-full my-8  flex justify-around'>
 
-      <Link
-        to="/"
-        className="bg-red-700 px-4 py-2 rounded hover:bg-black transition w-fit "
+        <Link
+          to="/"
+          className="bg-red-700 px-4 py-2 rounded hover:bg-black transition w-fit "
         >
-        ← Return
-      </Link>
-           <button
-                    onClick={() => setShowUnsoldPopup(!showUnsoldPopup)}
-                    className=" px-3 bg-green-800 text-white rounded-md items-center"
-                >
-                      Unsold Tickets 
-                </button>
-        </div>
+          ← Return
+        </Link>
+        <button
+          onClick={() => setShowUnsoldPopup(!showUnsoldPopup)}
+          className=" px-3 bg-green-800 text-white rounded-md items-center"
+        >
+          Unsold Tickets
+        </button>
+      </div>
+      <div className="w-full max-w-md mx-auto my-4 px-4">
+        <input
+          type="text"
+          placeholder="Search ticket by name"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+          className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+        />
+      </div>
+
       <div className="text-center mb-6">
         {gameStarted && !gameOver && (
           <div className="text-3xl font-extrabold text-yellow-400 animate-pulse drop-shadow-lg bg-gradient-to-r from-red-700 to-yellow-600 py-4 px-6 rounded-xl shadow-xl border-4 border-yellow-500 text-center">
@@ -194,68 +205,74 @@ const GameStart = () => {
       ) : ' '}
 
 
-      <div className="mb-6 w-full flex flex-col items-center px-4">
+      <div className="mb-6 w-full flex flex-col items-center px-2">
         {/* Current number */}
-        <div className="text-4xl font-extrabold mb-4 text-center text-black">
-          Current Number:
-          <span className="ml-3 text-black bg-yellow-300 px-3 py-2 text-2xl rounded shadow">
+        <div className="text-2xl font-extrabold mb-4 text-center text-black">
+          Number:
+          <span className="ml-3 text-black bg-yellow-300 px-3 py-2 text-lg rounded shadow">
             {currentNumber !== null ? currentNumber : 'Waiting...'}
           </span>
         </div>
 
         {/* History numbers */}
-        <div className="flex overflow-x-auto whitespace-nowrap gap-2 w-full max-w-4xl bg-opacity-70 rounded p-3 shadow-inner">
+        <div className="flex flex-wrap gap-2 w-full max-w-4xl bg-opacity-70 rounded p-3 shadow-inner">
           {numberHistory.map((num, idx) => (
             <span
               key={idx}
-              className="bg-yellow-400 rounded-md text-red-800 font-bold px-3 py-2 shadow text-lg"
+              className="bg-yellow-400 rounded-md text-red-800 font-bold px-3 py-2 shadow text-sm"
             >
               {num}
             </span>
           ))}
         </div>
+
       </div>
 
 
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {tickets.map((ticket, index) => (
-          <div key={index} className="animated-ticket p-4 text-white shadow-lg">
-            <h3 className=" rounded-lg underline  mb-2 text-center text-black font-bold">Ticket {ticket.ticketNumber}</h3>
-            <div className="overflow-x-auto">
-              <table className="table-auto w-full border-collapse mb-2 text-white">
-                <tbody>
-                  {ticket.ticket.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {row.map((num, colIndex) => {
-                        const isMarked = numberHistory.includes(num);
-                        return (
-                          <td
-                            key={colIndex}
-                            className={`border w-7 h-7 border-black text-center ${num === 0
-                              ? 'bg-gray-200'
-                              : isMarked
-                                ? 'bg-black text-white font-bold'
-                                : 'bg-red-700 text-white'
-                              }`}
-                          >
-                            {num === 0 ? '' : num}
-                          </td>
-                        );
-                      })}
+        {tickets
+          .filter(ticket =>
+            ticket.name.toLowerCase().includes(searchName.toLowerCase())
+          )
+          .map((ticket, index) => (
 
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div key={index} className="animated-ticket p-4 text-white shadow-lg">
+              <h3 className=" rounded-lg underline  mb-2 text-center text-black font-bold">Ticket {ticket.ticketNumber}</h3>
+              <div className="overflow-x-auto">
+                <table className="table-auto w-full border-collapse mb-2 text-white">
+                  <tbody>
+                    {ticket.ticket.map((row, rowIndex) => (
+                      <tr key={rowIndex}>
+                        {row.map((num, colIndex) => {
+                          const isMarked = numberHistory.includes(num);
+                          return (
+                            <td
+                              key={colIndex}
+                              className={`border w-7 h-7 border-black text-center ${num === 0
+                                ? 'bg-gray-200'
+                                : isMarked
+                                  ? 'bg-black text-white font-bold'
+                                  : 'bg-red-700 text-white'
+                                }`}
+                            >
+                              {num === 0 ? '' : num}
+                            </td>
+                          );
+                        })}
+
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className={`w-full py-1 rounded font-bold transition-all duration-300 px-2 border shadow-xl border-red-900 text-black hover:bg-black hover:text-white animate-glow}`}>
+                {ticket.name}
+              </div>
             </div>
 
-            <div className={`w-full py-1 rounded font-bold transition-all duration-300 px-2 border shadow-xl border-red-900 text-black hover:bg-black hover:text-white animate-glow}`}>
-              {ticket.name}
-            </div>
-          </div>
-
-        ))}
+          ))}
 
       </div>
       <ContactButtons />

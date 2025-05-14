@@ -84,6 +84,12 @@ const App = () => {
           >
             🧑‍🤝‍🧑 Join Game
           </Link>
+            <Link
+            to="/player/buytickets"
+            className="bg-yellow-400 text-black font-bold py-3 px-6 rounded-xl shadow-md hover:bg-yellow-300 hover:scale-105 transition-all duration-300 border-2 border-yellow-500 text-center w-64 sm:w-auto"
+          >
+            Buy Tickets
+          </Link>
         </div>
 
         <p className="mt-12 text-sm text-yellow-500 font-mono animate-pulse text-center">

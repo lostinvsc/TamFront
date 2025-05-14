@@ -22,6 +22,9 @@ const GenerateTickets = () => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [seconds, setSeconds] = useState([]);
     const [voice, setVoice] = useState("");
+    const [copied, setCopied] = useState(false);
+    const textToCopy = "https://tam-front.vercel.app/player/buytickets";
+    const textToCopy2 = "https://tam-front.vercel.app/player/gamestart";
 
     const navigate = useNavigate();
 
@@ -29,10 +32,10 @@ const GenerateTickets = () => {
         try {
             let userInput = prompt("Enter ticket quantity:");
             if (userInput) {
-                const data={
-                    n:userInput
+                const data = {
+                    n: userInput
                 }
-                const res = await axios.post(`${backendURL}/api/generate-tickets`,data);
+                const res = await axios.post(`${backendURL}/api/generate-tickets`, data);
                 setNames({})
 
                 setUp(!up)
@@ -127,6 +130,16 @@ const GenerateTickets = () => {
         );
     };
 
+    const handleCopy = (textt) => {
+        navigator.clipboard.writeText(textt)
+            .then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            })
+            .catch((err) => {
+                console.error("Failed to copy: ", err);
+            });
+    };
 
     return (
 
@@ -138,6 +151,18 @@ const GenerateTickets = () => {
                 >
                     ← Return
                 </Link>
+            </div>
+            <div className="mt-8 mb-2">
+               
+                    <button onClick={() => handleCopy(textToCopy)} className='px-4 py-2 bg-orange-600 border text-white hover:bg-black transition rounded'>Copy Link to Buy Tickets</button>
+                    {copied && <span className='fixed top-3 left-1/2 mr-3 text-white'>Copied</span>}
+            
+            </div>
+            <div className="mt-8 mb-2">
+               
+                    <button onClick={() => handleCopy(textToCopy2)} className='px-4 py-2 border bg-orange-600 text-white hover:bg-black transition rounded'>Copy Link to Join Game</button>
+                    
+            
             </div>
 
             <div className="">
