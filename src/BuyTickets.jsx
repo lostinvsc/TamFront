@@ -43,7 +43,10 @@ const BuyTickets = () => {
             }
         } catch (err) {
             console.error('Error assigning ticket:', err);
-            alert("Failed to assign ticket.");
+
+            const errorMsg = err.response?.data?.error || "Failed to assign ticket.";
+
+            alert(errorMsg);
         }
     };
     const handleNameChange = (index, value) => {

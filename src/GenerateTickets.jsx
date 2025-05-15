@@ -109,12 +109,16 @@ const GenerateTickets = () => {
                 name: name
             };
 
-            await axios.post(`${backendURL}/api/assign-ticket`, data);
+            const res = await axios.post(`${backendURL}/api/assign-ticket`, data);
             // alert(`Ticket ${index + 1} Assigned to ${name}`);
             setUp(!up)
         } catch (err) {
             console.error('Error assigning ticket:', err);
-            alert("Failed to assign ticket.");
+
+            const errorMsg =
+                err.response?.data?.error || "Failed to assign ticket.";
+
+            alert(errorMsg);
         }
     };
 
@@ -153,16 +157,16 @@ const GenerateTickets = () => {
                 </Link>
             </div>
             <div className="mt-8 mb-2">
-               
-                    <button onClick={() => handleCopy(textToCopy)} className='px-4 py-2 bg-orange-600 border text-white hover:bg-black transition rounded'>Copy Link to Buy Tickets</button>
-                    {copied && <span className='fixed top-3 left-1/2 mr-3 text-white'>Copied</span>}
-            
+
+                <button onClick={() => handleCopy(textToCopy)} className='px-4 py-2 bg-orange-600 border text-white hover:bg-black transition rounded'>Copy Link to Buy Tickets</button>
+                {copied && <span className='fixed top-3 left-1/2 mr-3 text-white'>Copied</span>}
+
             </div>
             <div className="mt-8 mb-2">
-               
-                    <button onClick={() => handleCopy(textToCopy2)} className='px-4 py-2 border bg-orange-600 text-white hover:bg-black transition rounded'>Copy Link to Join Game</button>
-                    
-            
+
+                <button onClick={() => handleCopy(textToCopy2)} className='px-4 py-2 border bg-orange-600 text-white hover:bg-black transition rounded'>Copy Link to Join Game</button>
+
+
             </div>
 
             <div className="">
