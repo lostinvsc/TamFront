@@ -24,6 +24,8 @@ const GenerateTickets = () => {
     const [voice, setVoice] = useState("");
     const [copied, setCopied] = useState(false);
     const [sheetNames, setSheetNames] = useState({}); //changes
+    const [loading, setLoading] = useState(false); //changes
+
     const textToCopy = "https://tam-front.vercel.app/player/buytickets";
     const textToCopy2 = "https://tam-front.vercel.app/player/gamestart";
 
@@ -31,11 +33,12 @@ const GenerateTickets = () => {
 
     const generatetickets = async () => {
         try {
-            let userInput = prompt("Enter ticket quantity:");
+            let userInput = prompt("Enter Sheet quantity:");
             if (userInput) {
                 const data = {
                     n: userInput
                 }
+                setLoading(true);
                 const res = await axios.post(`${backendURL}/api/generate-tickets`, data);
                 setNames({})
 
@@ -86,6 +89,7 @@ const GenerateTickets = () => {
                 const allTickets = res.data.tickets
                 //   console.log(allTickets)
                 setTickets(allTickets);
+                setLoading(false);
 
             } catch (err) {
                 console.error('Error fetching tickets:', err);
@@ -190,6 +194,16 @@ const GenerateTickets = () => {
     return (
 
         <div className='h-screen overflow-auto flex flex-col text-black mx-auto pb-16 px-4 sm:px-6 lg:px-8 animated-gradient'>
+
+                {loading && 
+            <div className='w-full flex justify-center'>
+                <div className="bg-yellow-400 w-full px-2 sm:w-fit sm:px-4  p-2 rounded mt-4 text-center">
+                    !! Generating Sheets, wait !!
+                </div>
+            </div>
+
+             }
+
             <div className="mt-8 mb-2">
                 <Link
                     to="/"
@@ -198,15 +212,19 @@ const GenerateTickets = () => {
                     ← Return
                 </Link>
             </div>
+
+
+
+
             <div className="mt-8 mb-2">
 
-                <button onClick={() => handleCopy(textToCopy)} style={{ background: 'linear-gradient(to right, black 0%, red 50%, black 100%)' }} className='px-4 py-2 border text-white hover:bg-black transition rounded'>Copy Link to Buy Tickets</button>
+                <button onClick={() => handleCopy(textToCopy)} style={{ background: 'linear-gradient(to right, purple 0%, red 100%' }} className='px-4 sm:w-[250px] sm:px-4 w-full text-center py-2  text-white hover:bg-black transition rounded'>Copy Link to Buy Tickets</button>
                 {copied && <span className='fixed top-3 left-1/2 mr-3 text-white'>Copied</span>}
 
             </div>
             <div className="mt-8 mb-2">
 
-                <button onClick={() => handleCopy(textToCopy2)} style={{ background: 'linear-gradient(to right, black 0%, red 50%, black 100%)' }} className='px-4 py-2 border bg-orange-600 text-white hover:bg-black transition rounded'>Copy Link to Join Game</button>
+                <button onClick={() => handleCopy(textToCopy2)} style={{ background: 'linear-gradient(to right, red 0%, purple 100%)' }} className='px-4 sm:w-[250px] sm:px-4 w-full text-center py-2  bg-orange-600 text-white hover:bg-black transition rounded'>Copy Link to Join Game</button>
 
 
             </div>
@@ -340,7 +358,7 @@ const GenerateTickets = () => {
 
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {chunkTickets(tickets, 4).map((ticketGroup, groupIndex) => {
+                    {chunkTickets(tickets, 6).map((ticketGroup, groupIndex) => {
                         const isAnyTicketSold = ticketGroup.some((ticket) => !!ticket.name);
 
                         return (
@@ -350,7 +368,7 @@ const GenerateTickets = () => {
                                 </h3>
 
                                 {ticketGroup.map((ticket, index) => {
-                                    const actualIndex = groupIndex * 4 + index;
+                                    const actualIndex = groupIndex * 6 + index;
                                     return (
                                         <div key={ticket.ticketNumber} className="py-3 px-2 text-white">
                                             <div className="overflow-x-auto">
@@ -416,7 +434,7 @@ const GenerateTickets = () => {
                                                 : 'bg-red-500 hover:bg-black'
                                             }`}
                                     >
-                                        {isAnyTicketSold ? `Sheet ${groupIndex + 1} Already Sold` : `Buy Sheet ${groupIndex + 1}`}
+                                        {isAnyTicketSold ? `Sheet ${groupIndex + 1} Sold` : `Sell Sheet ${groupIndex + 1}`}
                                     </button>
                                 </div>
                             </div>

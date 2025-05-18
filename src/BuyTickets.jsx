@@ -145,7 +145,7 @@ const BuyTickets = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     
-                    { !searchName &&  chunkTickets(tickets, 4).map((ticketGroup, groupIndex) => {
+                    { !searchName &&  chunkTickets(tickets, 6).map((ticketGroup, groupIndex) => {
                         const isAnyTicketSold = ticketGroup.some((ticket) => !!ticket.name);
 
                         return (
@@ -157,7 +157,7 @@ const BuyTickets = () => {
                                 </h3>
 
                                 {ticketGroup.map((ticket, index) => {
-                                    const actualIndex = groupIndex * 4 + index;
+                                    const actualIndex = groupIndex * 6 + index;
                                     return (
                                         <div key={ticket.ticketNumber} className="py-3 px-2 text-white">
                                             <div className="overflow-x-auto">
@@ -216,7 +216,7 @@ const BuyTickets = () => {
                                         className={`w-full py-2 mb-3 rounded text-white transition-all duration-300 font-semibold
                         ${isAnyTicketSold ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-500 hover:bg-black'}`}
                                     >
-                                        {isAnyTicketSold ? `Sheet-${groupIndex + 1}` : `Buy Sheet ${groupIndex + 1}`}
+                                        {isAnyTicketSold ? `Sheet-${groupIndex + 1} sold` : `Buy Sheet ${groupIndex + 1}`}
                                     </button>
                                 </div>
                             </div>
