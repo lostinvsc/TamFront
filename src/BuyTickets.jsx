@@ -216,7 +216,7 @@ const BuyTickets = () => {
                                         className={`w-full py-2 mb-3 rounded text-white transition-all duration-300 font-semibold
                         ${isAnyTicketSold ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-500 hover:bg-black'}`}
                                     >
-                                        {isAnyTicketSold ? `Sheet-${groupIndex + 1} sold` : `Buy Sheet ${groupIndex + 1}`}
+                                        {isAnyTicketSold ? `Can't Buy Sheet ${groupIndex + 1}` : `Buy Sheet ${groupIndex + 1}`}
                                     </button>
                                 </div>
                             </div>

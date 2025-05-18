@@ -434,7 +434,7 @@ const GenerateTickets = () => {
                                                 : 'bg-red-500 hover:bg-black'
                                             }`}
                                     >
-                                        {isAnyTicketSold ? `Sheet ${groupIndex + 1} Sold` : `Sell Sheet ${groupIndex + 1}`}
+                                        {isAnyTicketSold ? `Can't Buy Sheet ${groupIndex + 1}` : `Sell Sheet ${groupIndex + 1}`}
                                     </button>
                                 </div>
                             </div>
