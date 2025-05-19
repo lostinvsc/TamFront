@@ -8,6 +8,7 @@ const BuyTickets = () => {
     const [up, setUp] = useState(false);
     const [searchName, setSearchName] = useState('');
     const [sheetNames, setSheetNames] = useState({}); //changes
+    const [loading, setLoading] = useState(true); //changes
 
     useEffect(() => {
 
@@ -18,6 +19,7 @@ const BuyTickets = () => {
                 const allTickets = res.data.tickets
                 //   console.log(allTickets)
                 setTickets(allTickets);
+                setLoading(false)
 
             } catch (err) {
                 console.error('Error fetching tickets:', err);
@@ -114,6 +116,15 @@ const BuyTickets = () => {
                     ← Return
                 </Link>
             </div>
+
+            {loading && 
+            <div className='w-full flex justify-center'>
+                <div className=" text-yellow-400 w-full px-2 sm:w-fit sm:px-4  p-2 rounded mt-4 text-center">
+                    !! Loading Tickets, wait !!
+                </div>
+            </div>
+
+             }
 
             <div className="w-full max-w-md mx-auto my-4 px-4">
                 <input

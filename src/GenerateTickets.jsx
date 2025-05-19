@@ -204,6 +204,15 @@ const GenerateTickets = () => {
 
              }
 
+                {tickets.length==0 && 
+            <div className='w-full flex justify-center'>
+                <div className="text-yellow-400 w-full px-2 sm:w-fit sm:px-4  p-2 rounded mt-4 text-center">
+                    !! Loading Tickets, wait !!
+                </div>
+            </div>
+
+             }
+
             <div className="mt-8 mb-2">
                 <Link
                     to="/"
