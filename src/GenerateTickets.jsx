@@ -34,7 +34,8 @@ const GenerateTickets = () => {
     const generatetickets = async () => {
         try {
             let userInput = prompt("Enter Sheet quantity:");
-            if (userInput) {
+            
+            if (Number(userInput)>0) {
                 const data = {
                     n: userInput
                 }
@@ -43,6 +44,8 @@ const GenerateTickets = () => {
                 setNames({})
 
                 setUp(!up)
+            }else{
+                alert("Enter value greater than 0")
             }
         } catch (err) {
             console.error('Error fetching tickets:', err);
