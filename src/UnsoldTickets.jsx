@@ -26,7 +26,7 @@ const UnsoldTickets = () => {
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
-    <div className="min-h-screen px-6 text-white">
+    <div className="min-h-screen px-6 text-white mb-14">
       <h2 className="text-2xl font-bold mb-4 text-yellow-400 border py-2 rounded-xl text-center">Unsold Tickets</h2>
       {ticketNumbers.length === 0 ? (
         <p className="text-center">No unsold tickets</p>
