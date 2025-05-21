@@ -7,6 +7,7 @@ import NavigationGuard from "./NavigationGuard";
 import { backendURL } from './config';
 import ContactButtons from "./ContactButtons";
 import UnsoldTickets from './UnsoldTickets.jsx';
+import melody from "./assets/melody.mp3"
 
 const GameStart = () => {
   const [currentNumber, setCurrentNumber] = useState(null);
@@ -19,6 +20,23 @@ const GameStart = () => {
   const [check, setCheck] = useState();
   const [showUnsoldPopup, setShowUnsoldPopup] = useState(false);
   const [searchName, setSearchName] = useState('');
+  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const [audio] = useState(new Audio(melody));
+
+  useEffect(() => {
+    audio.loop = true; // Loop the song
+    audio.volume = 0.5; // Optional: Set initial volume
+    if (isMusicPlaying) {
+      audio.play().catch((err) => console.warn("Autoplay error:", err));
+    } else {
+      audio.pause();
+    }
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [isMusicPlaying, audio]);
 
 
   useUnsavedChangesWarning(leaving);
@@ -147,7 +165,7 @@ const GameStart = () => {
   return (
     <div className='h-screen w-full overflow-auto flex flex-col text-black mx-auto pb-16  sm:px-6 lg:px-8 animated-gradient'>
       <NavigationGuard when={leaving} message="If you leave, can't see this game later. Leave anyway?" />
-      <div className='text-white px-4 py-2 w-full my-8  flex justify-around'>
+      <div className='text-white px-4 py-2 w-full my-8  flex flex-wrap justify-between'>
 
         <Link
           to="/"
@@ -162,6 +180,16 @@ const GameStart = () => {
           Unsold Tickets
         </button>
       </div>
+
+      <div className='text-white px-4 py-2 w-full  flex flex-wrap'>
+        <button
+          onClick={() => setIsMusicPlaying(!isMusicPlaying)}
+          className="px-3 py-2 bg-blue-700 text-white rounded hover:bg-blue-900 transition"
+        >
+          {isMusicPlaying ? "⏸ Stop Music" : "▶ Play Music"}
+        </button>
+      </div>
+
       <div className="w-full max-w-md mx-auto my-4 px-4">
         <input
           type="text"
