@@ -410,7 +410,7 @@ const GenerateTickets = () => {
                                     }`}
                                 disabled={!!ticket.name}
                             >
-                                {ticket.name ? 'Sold' : 'Sell'}
+                                {ticket.name ? 'Sold' : 'Buy'}
                             </button>
                         </div>
 
