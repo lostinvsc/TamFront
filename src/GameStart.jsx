@@ -133,6 +133,8 @@ const GameStart = () => {
       setGameOver(true);
     });
 
+    // Call for pattren winners
+
     socket.on("new-winner", (val) => {
       const names = val.value.join(" and ");
       speakNumber(`${val.type} by ${names}`);
