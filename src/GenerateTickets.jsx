@@ -99,7 +99,7 @@ const GenerateTickets = () => {
             }
         };
 
-        if (localStorage.getItem('adminToken') == "generateTicketS") {
+        if (localStorage.getItem('adminToken') == "generateTicketR") {
             fetchTickets();
         } else {
             navigate('/host/login');
