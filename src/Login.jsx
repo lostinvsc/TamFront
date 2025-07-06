@@ -12,7 +12,7 @@ const Login = () => {
 
     useEffect(() => {
 
-        if(localStorage.getItem('adminToken')=="generateTicketS"){
+        if(localStorage.getItem('adminToken')=="generateTicketR"){
         navigate('/host/generatetickets');
         }
 
